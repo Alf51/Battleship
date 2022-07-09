@@ -162,7 +162,6 @@ public class Battlefield {
             case VERTICALLY -> considerDamageOnVerticalShip(coordinateY, coordinateX);
             case HORIZONTALLY -> considerDamageOnHorizontalShip(coordinateY, coordinateX);
             case NOPE -> true;
-            default -> false;
         };
     }
 
@@ -314,15 +313,11 @@ public class Battlefield {
     }
 
     private boolean checkSpaceAroundShip(Ship ship) {
-        boolean isFreeAroundShip = false;
-        switch (ship.getDirection()) {
-            case VERTICALLY:
-                isFreeAroundShip = chekSpaceOnVerticallyShip(ship);
-                break;
-            case HORIZONTALLY:
-                isFreeAroundShip = chekSpaceOnHorizontalShip(ship);
-                break;
-        }
+        boolean isFreeAroundShip = switch (ship.getDirection()) {
+            case VERTICALLY -> chekSpaceOnVerticallyShip(ship);
+            case HORIZONTALLY -> chekSpaceOnHorizontalShip(ship);
+            default -> false;
+        };
         if (!isFreeAroundShip) {
             System.out.println("Error! You placed it too close to another one. Try again:");
             isFreeAroundShip = false;
@@ -400,7 +395,7 @@ public class Battlefield {
         return Math.max(coordinate1.charAt(0), coordinate2.charAt(0)) - START_MEASURE_COORDINATE_Y;
     }
 
-    //Нажать Enter для передачи хода игроку
+    //Нажать Enter для передачи хода игроку!
     private static void promptEnterKey() {
         System.out.println(MESSAGE_TURN_NEXT_PLAYER);
         try {
